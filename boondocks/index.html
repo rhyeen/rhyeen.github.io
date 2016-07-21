@@ -1,4 +1,4 @@
-<!doctype html> 
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -22,9 +22,169 @@
                     tax: 0.73,
                     quantity: 0
                 },
+                'pick_3': {
+                    price: 19.95,
+                    tax: 1.07,
+                    quantity: 0
+                },
+                'indoor_unlimited': {
+                    price: 17.95,
+                    tax: 1.02,
+                    quantity: 0
+                },
+                'indoor_upgrade_adult': {
+                    price: 10.00,
+                    tax: .65,
+                    quantity: 0
+                },
+                'indoor_upgrade_junior': {
+                    price: 4.00,
+                    tax: .26,
+                    quantity: 0
+                },
+                'sizzling_sunday': {
+                    price: 11.99,
+                    tax: .78,
+                    quantity: 0
+                },
+                'twenty_five_for_twenty_game_card': {
+                    price: 20.00,
+                    tax: 0.00,
+                    quantity: 0
+                },
+                'fourty_for_twenty_game': {
+                    price: 20.00,
+                    tax: 0.00,
+                    quantity: 0
+                },
                 'game_card': {
                     price: 1,
                     tax: 0,
+                    quantity: 0
+                },
+                'half_price_adult_unlimited': {
+                    price: 13.98,
+                    tax: .83,
+                    quantity: 0
+                },
+                'half_price_junior_unlimited': {
+                    price: 10.98,
+                    tax: .65,
+                    quantity: 0
+                },
+                'attraction_pass': {
+                    price: 6.50,
+                    tax: .44,
+                    quantity: 0
+                },
+                'passenger_pass': {
+                    price: 3.25,
+                    tax: .21,
+                    quantity: 0
+                },
+                'miniture_golf': {
+                    price: 7.50,
+                    tax: .51,
+                    quantity: 0
+                },
+                'miniture_golf_under_58_inches': {
+                    price: 5.00,
+                    tax: .33,
+                    quantity: 0
+                },
+                'kiddie_cove': {
+                    price: 3.25,
+                    tax: .21,
+                    quantity: 0
+                },
+                'batting_cage_24_pitch': {
+                    price: 2.00,
+                    tax: 0,
+                    quantity: 0
+                },
+                'batting_cage_half_hour': {
+                    price: 15.00,
+                    tax: .98,
+                    quantity: 0
+                },
+                'batting_cage_1_hour': {
+                    price: 25.00,
+                    tax: 1.63,
+                    quantity: 0
+                },
+                'roller_ball': {
+                    price: 3.00,
+                    tax: 0,
+                    quantity: 0
+                },
+                'wrist_coil': {
+                    price: 1.00,
+                    tax: .07,
+                    quantity: 0
+                },
+                'lanyards': {
+                    price: 2.00,
+                    tax: .13,
+                    quantity: 0
+                },
+                'sunscreen': {
+                    price: 3.50,
+                    tax: .23,
+                    quantity: 0
+                },
+                'gloves': {
+                    price: 2.00,
+                    tax: .13,
+                    quantity: 0
+                },
+                'twelve_buck_tuesday_pass': {
+                    price: 12.00,
+                    tax: .59,
+                    quantity: 0
+                },
+                'nineteen_buck_tuesday_pass': {
+                    price: 19.00,
+                    tax: 1.08,
+                    quantity: 0
+                },
+                'tuesday_upgrade': {
+                    price: 7.00,
+                    tax: .46,
+                    quantity: 0
+                },
+                'buffet': {
+                    price: 8.00,
+                    tax: .60,
+                    quantity: 0
+                },
+                'two_dollars_off_jr_unlimited': {
+                    price: -2.00,
+                    tax: 0.00,
+                    quantity: 0
+                },
+                'four_dollars_off_unlimited': {
+                    price: -4.00,
+                    tax: -.26,
+                    quantity: 0
+                },
+                'three_dollars_off_jr_unlimited': {
+                    price: -3.00,
+                    tax: 0.00,
+                    quantity: 0
+                },
+                'five_dollars_off_unlimited': {
+                    price: -5.00,
+                    tax: 0.00,
+                    quantity: 0
+                },
+                'three_dollars_off_jr_unlimited_military': {
+                    price: -3.00,
+                    tax: -.20,
+                    quantity: 0
+                },
+                'five_dollars_off_unlimited_military': {
+                    price: -5.00,
+                    tax: -.33,
                     quantity: 0
                 }
             },
@@ -48,7 +208,7 @@
         }
 
 
-        function caculatePrice(element, item_key) {
+        function calculatePrice(element, item_key) {
             var item = getItem(item_key);
             item.quantity = element.value;
             updatePrice();
@@ -59,7 +219,8 @@
             var total,
                 key,
                 items,
-                item;
+                item,
+                total_element;
             items = shopping_cart.items;
             total = 0;
             for (key in items) {
@@ -68,8 +229,32 @@
             }
             total = makeDollarFormat(total)
             shopping_cart.costs.total = total;
-            var total_element = document.getElementById('cash_total');
+            total_element = document.getElementById('cash_total');
             total_element.value = total;
+            updateChangeDue();
+        }
+
+        function updateChangeDue() {
+            var cash_given_element,
+                cash_given,
+                change_due,
+                change_due_element,
+                total;
+            cash_given_element = document.getElementById('cash_given');
+            change_due_element = document.getElementById('cash_change_due');
+            total_element = document.getElementById('cash_total');
+            cash_given = cash_given_element.value;
+            total = total_element.value;
+
+            change_due = cash_given - total;
+            change_due = makeDollarFormat(change_due);
+
+            shopping_cart.costs.cash_given = cash_given;
+            shopping_cart.costs.change_due = change_due;
+            if (cash_given <= 0) {
+                change_due = "";
+            }
+            change_due_element.value = change_due;
         }
 
         function makeDollarFormat(value) {
@@ -105,7 +290,9 @@
             return [
                 'fun_packs_form',
                 'entitlements_form',
-                'merchandise_form'
+                'merchandise_form',
+                'twelve_buck_tuesday_form',
+                'coupons_form'
             ];
         }
 
@@ -124,59 +311,57 @@
         
     </script>
     <style type="text/css">
+        body {
+            min-width: 400px;
+        }
         .menu-btn {
             border: none;
             background-color: #96C957;
             font-size: 18px;
             padding: 15px;
-            margin: 0 5px 0 0;
+            margin: 0 5px 10px 0;
         }
-        .ticket-form div {
+
+        .ticket-form div,
+        .cash-form div {
             display: inline-block;
-            width: 250px;
+            width: 215px;
             text-align: right;
             font-size: 18px;
             margin-right: 10px;
         }
-        .ticket-form input {
-            border: 2px solid #000;
+
+        .ticket-form input,
+        .cash-form input {
+            border: 2px solid #333;
             font-size: 18px;
+            width: 100px;
         }
-        .ticket-form label {
+
+        .ticket-form label,
+        .cash-form label {
             display: block;
             margin-bottom: 10px;
         }
 
-        .ticket-container {
+        .ticket-container,
+        .cash-container {
             padding: 10px;
         }
 
         .cash-container {
             margin-top: 40px;
-            padding: 10px;
             background-color: #eee;
             border-top: 2px solid #aaa;
         }
 
-        .cash-form div {
-            display: inline-block;
-            width: 250px;
-            margin-right: 10px;
-            text-align: right;
-            font-size: 18px;
-        }
-        .cash-form input {
-            border: 2px solid #000;
-            font-size: 18px;
-        }
-        .cash-form label {
-            display: block;
-            margin-bottom: 10px;
-        }
+        .ticket-form input:disabled,
         .cash-form input:disabled {
             background-color: #ddd;
         }
+
     </style>
+
 </head>
 <body onload="setup()">
     <div class="page-container">
@@ -185,6 +370,8 @@
                 <button class="menu-btn" onclick="toggleForm('fun_packs_form')">Fun Packs</button>
                 <button class="menu-btn" onclick="toggleForm('entitlements_form')">Entitlements</button>
                 <button class="menu-btn" onclick="toggleForm('merchandise_form')">Merchandise</button>
+                <button class="menu-btn" onclick="toggleForm('twelve_buck_tuesday_form')">12 Buck Tuesday</button>
+                <button class="menu-btn" onclick="toggleForm('coupons_form')">Coupons</button>
             </nav>
         </section>
         <section class="ticket-container" id="fun_packs_form">
@@ -192,30 +379,168 @@
             <form class="ticket-form">
                 <label>
                     <div>Adult Unlimited</div>
-                    <input type="number" min="0" step="1" onblur="caculatePrice(this, 'adult_unlimited')">
+                    <input type="number" min="0" step="1" onblur="calculatePrice(this, 'adult_unlimited')">
                 </label>
                 <label>
                     <div>Junior Unlimited</div>
-                    <input type="number" min="0" step="1" onblur="caculatePrice(this, 'junior_unlimited')">
+                    <input type="number" min="0" step="1" onblur="calculatePrice(this, 'junior_unlimited')">
                 </label>
                 <label>
                     <div>Pick 2</div>
-                    <input type="number" min="0" step="1" onblur="caculatePrice(this, 'pick_2')">
+                    <input type="number" min="0" step="1" onblur="calculatePrice(this, 'pick_2')">
+                </label>
+                <label>
+                    <div>Pick 3</div>
+                    <input type="number" min="0" step="1" onblur="calculatePrice(this, 'pick_3')">
+                </label>
+                <label>
+                    <div>Indoor Unlimited</div>
+                    <input type="number" min="0" step="1" onblur="calculatePrice(this, 'indoor_unlimited')">
+                </label>
+                <label>
+                    <div>Indoor Upgrade Adult</div>
+                    <input type="number" min="0" step="1" onblur="calculatePrice(this, 'indoor_upgrade_adult')">
+                </label>
+                <label>
+                    <div>Indoor Upgrade Junior</div>
+                    <input type="number" min="0" step="1" onblur="calculatePrice(this, 'indoor_upgrade_junior')">
+                </label>
+                <label>
+                    <div>Sizzling Sunday</div>
+                    <input type="number" min="0" step="1" onblur="calculatePrice(this, 'sizzling_sunday')">
+                </label>
+                <label>
+                    <div>$25 for $20 game card</div>
+                    <input type="number" min="0" step="1" onblur="calculatePrice(this, 'twenty_five_for_twenty_game_card')">
+                </label>
+                <label>
+                    <div>$40 for $20 game card</div>
+                    <input type="number" min="0" step="1" onblur="calculatePrice(this, 'fourty_for_twenty_game')">
                 </label>
                 <label>
                     <div>Game Card</div>
-                    <input type="number" min="0" onblur="caculatePrice(this, 'game_card')" step="0.25">
+                    <input type="number" min="0" onblur="calculatePrice(this, 'game_card')" step="0.25">
+                </label>
+                <label>
+                    <div>Half Price Adult Unlimited</div>
+                    <input type="number" min="0" step="1" onblur="calculatePrice(this, 'half_price_adult_unlimited')">
+                </label>
+                <label>
+                    <div>Half Price Junior Unlimited</div>
+                    <input type="number" min="0" step="1" onblur="calculatePrice(this, 'half_price_junior_unlimited')">
                 </label>
             </form>
         </section>
-        <section class="ticket-container" id="entitlements_form">
+        <section class="ticket-container" id="entitlements_form" style="display: none;">
             <h2>Entitlements</h2>
             <form class="ticket-form">
+                <label>
+                    <div>Attraction pass</div>
+                    <input type="number" min="0" step="1" onblur="calculatePrice(this, 'attraction_pass')">
+                </label>
+                <label>
+                    <div>Passenger pass</div>
+                    <input type="number" min="0" step="1" onblur="calculatePrice(this, 'passenger_pass')">
+                </label>
+                <label>
+                    <div>Miniture Golf</div>
+                    <input type="number" min="0" step="1" onblur="calculatePrice(this, 'miniture_golf')">
+                </label>
+                <label>
+                    <div>Miniture Golf under 58"</div>
+                    <input type="number" min="0" step="1" onblur="calculatePrice(this, 'miniture_golf_under_58_inches')">
+                </label>
+                <label>
+                    <div>Kiddie Cove</div>
+                    <input type="number" min="0" step="1" onblur="calculatePrice(this, 'kiddie_cove')">
+                </label>
+                <label>
+                    <div>Batting Cage 24 pitch</div>
+                    <input type="number" min="0" step="1" onblur="calculatePrice(this, 'batting_cage_24_pitch')">
+                </label>
+                <label>
+                    <div>Batting Cage 1/2 hour</div>
+                    <input type="number" min="0" step="1" onblur="calculatePrice(this, 'batting_cage_half_hour')">
+                </label>
+                <label>
+                    <div>Batting Cage 1 hour</div>
+                    <input type="number" min="0" step="1" onblur="calculatePrice(this, 'batting_cage_1_hour')">
+                </label>
+                <label>
+                    <div>Roller Ball</div>
+                    <input type="number" min="0" step="1" onblur="calculatePrice(this, 'roller_ball')">
+                </label>
             </form>
         </section>
-        <section class="ticket-container" id="merchandise_form">
+        <section class="ticket-container" id="merchandise_form" style="display: none;">
             <h2>Merchandise</h2>
             <form class="ticket-form">
+                <label>
+                    <div>Wrist Coil</div>
+                    <input type="number" min="0" step="1" onblur="calculatePrice(this, 'wrist_coil')">
+                </label>
+                <label>
+                    <div>Lanyards</div>
+                    <input type="number" min="0" step="1" onblur="calculatePrice(this, 'lanyards')">
+                </label>
+                <label>
+                    <div>Sunscreen</div>
+                    <input type="number" min="0" step="1" onblur="calculatePrice(this, 'sunscreen')">
+                </label>
+                <label>
+                    <div>Gloves</div>
+                    <input type="number" min="0" step="1" onblur="calculatePrice(this, 'gloves')">
+                </label>
+            </form>
+        </section>
+        <section class="ticket-container" id="twelve_buck_tuesday_form" style="display: none;">
+            <h2>12 Buck Tuesday</h2>
+            <form class="ticket-form">
+                <label>
+                    <div>12 Buck Tuesday</div>
+                    <input type="number" min="0" step="1" onblur="calculatePrice(this, 'twelve_buck_tuesday_pass')">
+                </label>
+                <label>
+                    <div>19 Buck Tuesday w/karts</div>
+                    <input type="number" min="0" step="1" onblur="calculatePrice(this, 'nineteen_buck_tuesday_pass')">
+                </label>
+                <label>
+                    <div>Tuesday upgrade</div>
+                    <input type="number" min="0" step="1" onblur="calculatePrice(this, 'tuesday_upgrade')">
+                </label>
+                <label>
+                    <div>Buffet</div>
+                    <input type="number" min="0" step="1" onblur="calculatePrice(this, 'buffet')">
+                </label>
+            </form>
+        </section>
+        <section class="ticket-container" id="coupons_form" style="display: none;">
+            <h2>Coupons</h2>
+            <form class="ticket-form">
+                <label>
+                    <div>$2 Off Jr Unlimited</div>
+                    <input type="number" min="0" step="1" onblur="calculatePrice(this, 'two_dollars_off_jr_unlimited')">
+                </label>
+                <label>
+                    <div>$4 Off Unlimited</div>
+                    <input type="number" min="0" step="1" onblur="calculatePrice(this, 'four_dollars_off_unlimited')">
+                </label>
+                <label>
+                    <div>$3 Off Jr Unlimited</div>
+                    <input type="number" min="0" step="1" onblur="calculatePrice(this, 'three_dollars_off_jr_unlimited')">
+                </label>
+                <label>
+                    <div>$5 Off Unlimited</div>
+                    <input type="number" min="0" step="1" onblur="calculatePrice(this, 'five_dollars_off_unlimited')">
+                </label>
+                <label>
+                    <div>$3 Off Jr Unlimited Military</div>
+                    <input type="number" min="0" step="1" onblur="calculatePrice(this, 'three_dollars_off_jr_unlimited_military')">
+                </label>
+                <label>
+                    <div>$5 Off Unlimited Military</div>
+                    <input type="number" min="0" step="1" onblur="calculatePrice(this, 'five_dollars_off_unlimited_military')">
+                </label>
             </form>
         </section>
 
@@ -224,15 +549,15 @@
             <form class="cash-form">
                 <label>
                     <div>Total</div>
-                    <input id="cash_total" type="number" disabled>
+                    <input id="cash_total" type="number" disabled="">
                 </label>
                 <label>
                     <div>Cash Given</div>
-                    <input type="number" min="0" step="0.01">
+                    <input id="cash_given" type="number" min="0" step="0.01" onblur="updateChangeDue()">
                 </label>
                 <label>
                     <div>Change Due</div>
-                    <input id="cash_change_due" type="number" disabled>
+                    <input id="cash_change_due" type="number" disabled="">
                 </label>
             </form>
         </section>
