@@ -195,67 +195,16 @@
             }
         };
 
-        var pages = {
-            current_page: "ticket_sales_page",
-            all_pages: [
-                {
-                    id: "ticket_sales_page",
-                    forms: [
-                        'fun_packs_form',
-                        'entitlements_form',
-                        'merchandise_form',
-                        'twelve_buck_tuesday_form',
-                        'coupons_form'
-                    ]
-                },
-                {
-                    id: "bowling_page",
-                    forms: [
-                        'test1_form',
-                        'test2_form'
-                    ]
-                },
-                {
-                    id: "snack_bar_page",
-                    forms: [
-                        'test_b1_form'
-                    ]
-                }
-            ]
-        };
-
 
         function setup() {
-            resetPageDisplay();
+            resetFormDisplay();
         }
 
-        function resetPageDisplay() {
-            hideAllPages();
-            showCurrentPage();
-            hideAllForms();
-        }
-
-        function hideAllPages() {
-            var i, page;
-            for (i=0; i < pages.all_pages.length; i++) {
-                page = pages.all_pages[i];
-                hideElement(page.id);
-            }
-        }
-
-        function showCurrentPage() {
-            showElement(pages.current_page);
-        }
-
-
-        function togglePage(id) {
-            pages.current_page = id;
-            resetPageDisplay();
-        }
 
         function toggleForm(id) {
-            hideAllForms();
-            showElement(id);
+            var form = document.getElementById(id);
+            resetFormDisplay();
+            showForm(id);
         }
 
 
@@ -328,24 +277,33 @@
             return shopping_cart.items[item_key];
         }
 
-        function hideAllForms() {
-            var i, j, page;
-            for (i=0; i < pages.all_pages.length; i++) {
-                page = pages.all_pages[i];
-                for (j=0; j < page.forms.length; j++) {
-                    hideElement(page.forms[j]);
-                }
+        function resetFormDisplay() {
+            var form_ids = getFormIds(),
+                i;
+            for (i=0; i < form_ids.length; i++) {
+                hideForm(form_ids[i]);
             }
         }
 
 
-        function hideElement(id) {
+        function getFormIds() {
+            return [
+                'fun_packs_form',
+                'entitlements_form',
+                'merchandise_form',
+                'twelve_buck_tuesday_form',
+                'coupons_form'
+            ];
+        }
+
+
+        function hideForm(id) {
             var form = document.getElementById(id);
             form.style.display = 'none';
         }
 
 
-        function showElement(id) {
+        function showForm(id) {
             var form = document.getElementById(id);
             form.style.display = null;
         }
@@ -356,20 +314,12 @@
         body {
             min-width: 400px;
         }
-
-        .btn {
+        .menu-btn {
             border: none;
+            background-color: #96C957;
             font-size: 18px;
             padding: 15px;
             margin: 0 5px 10px 0;
-        }
-
-        .form-btn {
-            background-color: #96C957;
-        }
-
-        .page-btn {
-            background-color: #3BA6ED;
         }
 
         .ticket-form div,
@@ -414,23 +364,14 @@
 
 </head>
 <body onload="setup()">
-    <section>
-        <nav>
-            <button class="page-btn btn" onclick="togglePage('ticket_sales_page')">Ticket Sales</button>
-            <button class="page-btn btn" onclick="togglePage('bowling_page')">Bowling</button>
-            <button class="page-btn btn" onclick="togglePage('snack_bar_page')">Snack Bar</button>
-        </nav>
-    </section>
-    <!-- TICKET SALES -->
-    <div class="page-container" id="ticket_sales_page">
-        <h1>Ticket Sales</h1>
+    <div class="page-container">
         <section>
             <nav>
-                <button class="form-btn btn" onclick="toggleForm('fun_packs_form')">Fun Packs</button>
-                <button class="form-btn btn" onclick="toggleForm('entitlements_form')">Entitlements</button>
-                <button class="form-btn btn" onclick="toggleForm('merchandise_form')">Merchandise</button>
-                <button class="form-btn btn" onclick="toggleForm('twelve_buck_tuesday_form')">12 Buck Tuesday</button>
-                <button class="form-btn btn" onclick="toggleForm('coupons_form')">Coupons</button>
+                <button class="menu-btn" onclick="toggleForm('fun_packs_form')">Fun Packs</button>
+                <button class="menu-btn" onclick="toggleForm('entitlements_form')">Entitlements</button>
+                <button class="menu-btn" onclick="toggleForm('merchandise_form')">Merchandise</button>
+                <button class="menu-btn" onclick="toggleForm('twelve_buck_tuesday_form')">12 Buck Tuesday</button>
+                <button class="menu-btn" onclick="toggleForm('coupons_form')">Coupons</button>
             </nav>
         </section>
         <section class="ticket-container" id="fun_packs_form">
@@ -490,7 +431,7 @@
                 </label>
             </form>
         </section>
-        <section class="ticket-container" id="entitlements_form">
+        <section class="ticket-container" id="entitlements_form" style="display: none;">
             <h2>Entitlements</h2>
             <form class="ticket-form">
                 <label>
@@ -531,7 +472,7 @@
                 </label>
             </form>
         </section>
-        <section class="ticket-container" id="merchandise_form">
+        <section class="ticket-container" id="merchandise_form" style="display: none;">
             <h2>Merchandise</h2>
             <form class="ticket-form">
                 <label>
@@ -552,7 +493,7 @@
                 </label>
             </form>
         </section>
-        <section class="ticket-container" id="twelve_buck_tuesday_form">
+        <section class="ticket-container" id="twelve_buck_tuesday_form" style="display: none;">
             <h2>12 Buck Tuesday</h2>
             <form class="ticket-form">
                 <label>
@@ -573,7 +514,7 @@
                 </label>
             </form>
         </section>
-        <section class="ticket-container" id="coupons_form">
+        <section class="ticket-container" id="coupons_form" style="display: none;">
             <h2>Coupons</h2>
             <form class="ticket-form">
                 <label>
@@ -602,69 +543,24 @@
                 </label>
             </form>
         </section>
-    </div>
-    <!-- END TICKET SALES -->
 
-
-    <!-- BOWLING -->
-    <div class="page-container" id="bowling_page">
-        <h1>Bowling</h1>
-        <section>
-            <nav>
-                <button class="form-btn btn" onclick="toggleForm('test1_form')">Test 1</button>
-                <button class="form-btn btn" onclick="toggleForm('test2_form')">Test 2</button>
-            </nav>
-        </section>
-        <section class="ticket-container" id="test1_form">
-            <h2>Test 1</h2>
-            <form class="ticket-form">
-                
+        <!-- CASH BACK -->
+        <section class="cash-container">
+            <form class="cash-form">
+                <label>
+                    <div>Total</div>
+                    <input id="cash_total" type="number" disabled="">
+                </label>
+                <label>
+                    <div>Cash Given</div>
+                    <input id="cash_given" type="number" min="0" step="0.01" onblur="updateChangeDue()">
+                </label>
+                <label>
+                    <div>Change Due</div>
+                    <input id="cash_change_due" type="number" disabled="">
+                </label>
             </form>
         </section>
-        <section class="ticket-container" id="test2_form">
-            <h2>Test 2</h2>
-            <form class="ticket-form">
-                
-            </form>
-        </section>
-    </div>
-    <!-- END BOWLING -->
-
-
-    <!-- SNACK BAR -->
-    <div class="page-container" id="snack_bar_page">
-        <h1>Bowling</h1>
-        <section>
-            <nav>
-                <button class="form-btn btn" onclick="toggleForm('test_b1_form')">Test B 1</button>
-            </nav>
-        </section>
-        <section class="ticket-container" id="test_b1_form">
-            <h2>Test B 1</h2>
-            <form class="ticket-form">
-                
-            </form>
-        </section>
-    </div>
-    <!-- END SNACK BAR -->
-
-
-    <!-- CASH BACK -->
-    <div class="cash-container">
-        <form class="cash-form">
-            <label>
-                <div>Total</div>
-                <input id="cash_total" type="number" disabled="">
-            </label>
-            <label>
-                <div>Cash Given</div>
-                <input id="cash_given" type="number" min="0" step="0.01" onblur="updateChangeDue()">
-            </label>
-            <label>
-                <div>Change Due</div>
-                <input id="cash_change_due" type="number" disabled="">
-            </label>
-        </form>
     </div>
 </body>
 </html>
